@@ -20,8 +20,4 @@ def balance_the_dataset(data, y_name):
     return data
 
 
-def best_hyperparams_transform(param):
-    for key, value in param.items():
-        if value % 1 == 0:
-            param[key] = int(value)
-    return param
+

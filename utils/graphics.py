@@ -47,3 +47,35 @@ def plot_corr_matrix(X):
     # Draw the heatmap with the mask and correct aspect ratio
     sns.heatmap(corr_matrix, mask=mask, cmap=cmap, center=0, vmax=1, vmin=-1, annot=True,
                 square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+
+def plot_metrics_hist(models_names, metrics):
+    fig, ax = plt.subplots(figsize=(5, 5), nrows=1, ncols=1)
+    col_map = plt.get_cmap('Paired')
+    ax.bar(models_names, metrics, color=col_map.colors, edgecolor='k')
+    plt.grid(color='r', linestyle='--', linewidth=1)
+    ax.set_title("Распределение ROC_AUC_SCORE по моделям")
+    ax.set_xlabel("Модель")
+    ax.set_ylabel("ROC_AUC_SCORE")
+    fig.set_figwidth(10)  # ширина Figure
+    plt.ylim(min(metrics)*0.90, max(metrics)*1.03)
+
+
+def plot_class_separation(X, y, class_names, pairs, fig_size=3):
+    from matplotlib.colors import ListedColormap
+    cmap_bold = ListedColormap(['#FF0000',  '#00FF00'])
+
+    n_pairs = len(pairs)
+
+    fig, ax = plt.subplots(nrows=n_pairs, ncols=1, figsize=(fig_size, n_pairs*fig_size))
+
+    for j, pair in enumerate(pairs):
+        # отрисуем экземпляры
+        for i, iris_class in enumerate(class_names):
+            idx = y==i
+            ax[j].scatter(X[idx][pair[0]], X[idx][pair[1]],
+                          c=cmap_bold.colors[i], edgecolor='k',
+                          s=20, label=iris_class)
+
+        ax[j].set(xlabel=pair[0], ylabel=pair[1])
+        ax[j].legend()
