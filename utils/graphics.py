@@ -26,29 +26,6 @@ def plot_feature_importance(importance, names, model_type):
     plt.ylabel('FEATURE NAMES')
 
 
-def plot_corr_matrix(X):
-    h = X[X.columns]
-
-    # whitegrid
-    sns.set_style('whitegrid')
-    # compute correlation matrix...
-    corr_matrix = h.corr(method='spearman')
-    # ...and show it with a heatmap
-    # first define the dimension
-    # plt.figure(figsize=(10, 8))
-
-    # Generate a mask for the upper triangle
-    mask = np.zeros_like(corr_matrix, dtype=bool)
-    mask[np.triu_indices_from(mask)] = True
-
-    # Generate a custom diverging colormap
-    cmap = sns.diverging_palette(220, 10, as_cmap=True)
-
-    # Draw the heatmap with the mask and correct aspect ratio
-    sns.heatmap(corr_matrix, mask=mask, cmap=cmap, center=0, vmax=1, vmin=-1, annot=True,
-                square=True, linewidths=.5, cbar_kws={"shrink": .5})
-
-
 def plot_metrics_hist(models_names, metrics):
     fig, ax = plt.subplots(figsize=(5, 5), nrows=1, ncols=1)
     col_map = plt.get_cmap('Paired')
@@ -58,24 +35,7 @@ def plot_metrics_hist(models_names, metrics):
     ax.set_xlabel("Модель")
     ax.set_ylabel("ROC_AUC_SCORE")
     fig.set_figwidth(10)  # ширина Figure
-    plt.ylim(min(metrics)*0.90, max(metrics)*1.03)
+    plt.ylim(min(metrics) * 0.90, max(metrics) * 1.03)
 
 
-def plot_class_separation(X, y, class_names, pairs, fig_size=3):
-    from matplotlib.colors import ListedColormap
-    cmap_bold = ListedColormap(['#FF0000',  '#00FF00'])
 
-    n_pairs = len(pairs)
-
-    fig, ax = plt.subplots(nrows=n_pairs, ncols=1, figsize=(fig_size, n_pairs*fig_size))
-
-    for j, pair in enumerate(pairs):
-        # отрисуем экземпляры
-        for i, iris_class in enumerate(class_names):
-            idx = y==i
-            ax[j].scatter(X[idx][pair[0]], X[idx][pair[1]],
-                          c=cmap_bold.colors[i], edgecolor='k',
-                          s=20, label=iris_class)
-
-        ax[j].set(xlabel=pair[0], ylabel=pair[1])
-        ax[j].legend()
